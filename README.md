@@ -111,7 +111,7 @@ model_final.h5
 Use the trained model to control the car:
 
 ```bash
-python drive.py model_final.h5
+uv run python drive.py model_final.h5
 ```
 
 or
