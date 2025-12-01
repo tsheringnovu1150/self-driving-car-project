@@ -136,3 +136,7 @@ if __name__ == "__main__":
     app = socketio.Middleware(sio, app)
     print("Server starting on port 4567...")
     eventlet.wsgi.server(eventlet.listen(("", 4567)), app)
+
+
+# both of us contributed on this file and took time as stimulator works only on old packages
+# use some code from file shared by prof.

@@ -6,7 +6,8 @@ DATA_DIR = "./data"
 CSV_PATH = os.path.join(DATA_DIR, "driving_log.csv")
 FOLDERS = ["Left", "Forward", "Right"]
 
-
+# coontributes by Tshering Norbu, instead of setting the same steering angle,
+# it generates steering angle based on the image and path_name
 def calculate_steering_angle(image_path, folder_bias):
     image = cv2.imread(image_path)
     if image is None:
@@ -90,4 +91,4 @@ with open(CSV_PATH, "w") as f:
                 count += 1
 
 print(f"Success! Generated labels for {count} images.")
-print("You can now open 'data/driving_log.csv' to inspect values.")
+print("Open 'data/driving_log.csv' to inspect values.")

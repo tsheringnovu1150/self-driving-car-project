@@ -42,7 +42,7 @@ def load_data():
 
     return np.array(image_paths), np.array(steering_angles)
 
-
+# architecture reference from: https://developer.nvidia.com/blog/deep-learning-self-driving-cars/
 def build_model(hp):
     """
     Tunes:
@@ -104,6 +104,7 @@ def build_model(hp):
     return model
 
 
+# since training data is very less for the large NN, so use parameter tunning and large argumentation
 class MyHyperTuner(kt.BayesianOptimization):
     def run_trial(self, trial, *args, **kwargs):
         hp = trial.hyperparameters
@@ -198,3 +199,5 @@ if __name__ == "__main__":
 
     model.save(os.path.join(MODEL_DIR, "model_final.h5"))
 
+# contributed by both
+# took time to get the good performing hyperparameter

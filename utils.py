@@ -11,20 +11,23 @@ def load_image(image_path):
     return mpimg.imread(image_path)
 
 
-def crop(image):
-    # Crop sky (top) and hood (bottom)
-    return image[60:-25, :, :]
+def crop(image): # Tshering Norbu
+    # since the training dataset already zoom and crop
+    height = image.shape[0]
+    if height > 90:
+        return image[60:-25, :, :]
+    return image
 
 
-def resize(image):
+def resize(image): # Tshering Norbu
     return cv2.resize(image, (IMAGE_WIDTH, IMAGE_HEIGHT), cv2.INTER_AREA)
 
 
-def rgb2yuv(image):
+def rgb2yuv(image): # Tshering Norbu
     return cv2.cvtColor(image, cv2.COLOR_RGB2YUV)
 
 
-def preprocess(image):
+def preprocess(image): # Tshering Norbu
     image = crop(image)
     image = resize(image)
     # convert to YUV (NVIDIA architecture recommendation)
@@ -35,7 +38,7 @@ def preprocess(image):
     image = image / 255.0
     return image
 
-
+# Rinchen Wangdi
 def random_translate(image, steering_angle, range_x=100, range_y=10):
     trans_x = range_x * (np.random.rand() - 0.5)
     trans_y = range_y * (np.random.rand() - 0.5)
@@ -45,7 +48,7 @@ def random_translate(image, steering_angle, range_x=100, range_y=10):
     image = cv2.warpAffine(image, trans_m, (width, height))
     return image, steering_angle
 
-
+# Rinchen Wangdi
 def random_shadow(image):
     # nput must be RGB, puts random shadow on image
     h, w = image.shape[0], image.shape[1]
@@ -62,7 +65,7 @@ def random_shadow(image):
 
     return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 
-
+# Tsheing Norbu
 def random_brightness(image):
     # input must be RGB, puts random brightness on image
     hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
@@ -70,14 +73,15 @@ def random_brightness(image):
     hsv[:, :, 2] = np.clip(hsv[:, :, 2] * ratio, 0, 255)
     return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 
-
+# since the data set is less, use fliping of right and left image
+# Tshering Norbu
 def random_flip(image, steering_angle):
     if np.random.rand() < 0.5:
         image = cv2.flip(image, 1)
         steering_angle = -steering_angle
     return image, steering_angle
 
-
+#  Rinchen Wangi
 def augment(path, steering_angle):
     # load RGB
     image = load_image(path)
@@ -94,7 +98,7 @@ def augment(path, steering_angle):
 
     return image, steering_angle
 
-
+# Rinchen Wangdi
 def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_training):
     images = np.empty([batch_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS])
     steers = np.empty(batch_size)
@@ -107,6 +111,7 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
             angle = steering_angles[index]
 
             # rejection sampling for straight driving, bias on left and right
+            # since data set center: 30,  left and right: 12 each
             if abs(angle) < 0.05:
                 if np.random.rand() > 0.3:
                     continue
@@ -126,3 +131,6 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
                 continue
 
         yield images, steers
+
+# since the image have to YUV for nvidia
+# so use YUV
