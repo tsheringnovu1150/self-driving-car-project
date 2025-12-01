@@ -117,5 +117,5 @@ uv run python drive.py model_final.h5
 or
 
 ```bash
-python drive.py model_best.h5
+uv run python drive.py model_best.h5
 ```
