@@ -1,7 +1,19 @@
-# Self-Driving Car — Behavioral Cloning (Minimal Dataset Version)
+# Self-Driving Car
 
 This project trains a lightweight self-driving car model using a very small dataset
 (54 images) with Keras + Keras Tuner.
+
+
+### **`drive.py`**
+- Runs the trained model in the simulator.
+### **`model.py`**
+- Main training script. Loads data, builds the CNN model, performs training, and saves:
+### **`data_explorations.py`** 
+- Basic dataset analysis. Shows steering angle distribution and sample images to understand data balance and quality.
+### **`label_generators.py`**
+- Prepares the dataset. Applies steering corrections for left/right images and generates a clean `driving_log.csv` for training.
+### **`utils.py`**
+- Helper functions for preprocessing, augmentation, image loading, and generator logic used by other scripts.
 
 The workflow is simple:
 
