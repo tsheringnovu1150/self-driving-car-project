@@ -10,7 +10,7 @@ cycler==0.12.1
 dnspython==2.8.0
 eventlet==0.40.3
 flask==2.0.3
-flask-socketio==5.5.1
+flask-socketio==4.3.1
 flatbuffers==25.9.23
 fonttools==4.60.1
 gast==0.6.0
@@ -24,7 +24,9 @@ itsdangerous==2.2.0
 jinja2==3.1.6
 joblib==1.5.2
 keras==3.12.0
+keras-tuner==1.4.8
 kiwisolver==1.4.9
+kt-legacy==1.0.5
 libclang==18.1.1
 markdown==3.10
 markdown-it-py==4.0.0

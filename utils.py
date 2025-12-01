@@ -34,8 +34,6 @@ def preprocess(image): # Tshering Norbu
     image = rgb2yuv(image)
     # blur
     image = cv2.GaussianBlur(image, (3, 3), 0)
-    # normalize
-    image = image / 255.0
     return image
 
 # Rinchen Wangdi
@@ -113,7 +111,7 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
             # rejection sampling for straight driving, bias on left and right
             # since data set center: 30,  left and right: 12 each
             if abs(angle) < 0.05:
-                if np.random.rand() > 0.3:
+                if np.random.rand() > 0.7:
                     continue
 
             try:

@@ -17,6 +17,8 @@ INPUT_SHAPE = (utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS)
 MODEL_DIR = "model"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
+# This tells the generator to create 10x variations per epoch
+AUGMENTATION_FACTOR = 10
 
 def load_data():
     """
@@ -53,7 +55,7 @@ def build_model(hp):
     -- optimizer (adam and rmsprop)
     """
     model = Sequential()
-    # normalize
+    # normalize: input 0..255 becomes -1..1
     model.add(Lambda(lambda x: x / 127.5 - 1.0, input_shape=INPUT_SHAPE))
     act_func = "elu"  # activation function
     model.add(
@@ -69,7 +71,7 @@ def build_model(hp):
             hp.Int("conv_2", 24, 48, step=12, default=36),
             (5, 5),
             strides=(2, 2),
-            activation=act_fuc,
+            activation=act_func,
         )
     )
     model.add(
@@ -187,17 +189,22 @@ if __name__ == "__main__":
         verbose=1
         )
 
+    model.save(os.path.join(MODEL_DIR, "model_final.h5"))
+
+    # multiply len(X_train) by 10 so the generator runs longer
+    final_steps_per_epoch = (len(X_train) * AUGMENTATION_FACTOR) // best_batch_size
+    final_val_steps = len(X_valid) // best_batch_size
+
+    if final_steps_per_epoch == 0: final_steps_per_epoch = 1
+
     model.fit(
         train_gen,
-        steps_per_epoch=len(X_train) // best_batch_size,
+        steps_per_epoch=final_steps_per_epoch,
         validation_data=valid_gen,
-        validation_steps=len(X_valid) // best_batch_size,
+        validation_steps=final_val_steps,
         epochs=EPOCHS_FINAL,
         callbacks=[checkpoint],
         verbose=1,
-        )
+    )
 
     model.save(os.path.join(MODEL_DIR, "model_final.h5"))
-
-# contributed by both
-# took time to get the good performing hyperparameter
